@@ -45,7 +45,9 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	}
 	// Next, insert the username, along with the hashed password into the database
 	// initialize our database connection in this case its a map
-	users[creds.Username] = string(hashedPassword)
+	users = map[string]string{
+		creds.Username: string(hashedPassword),
+	}
 
 	// Check that value exists
 	for k, v := range users {
@@ -74,5 +76,8 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 
 	// If we reach this point, that means the users password was correct, and that they are authorized
 	// The default 200 status is sent
+	fmt.Printf("user : %v Successfully authenticated\n", creds.Username)
+	// If the session is valid, return the welcome message to the user
+	w.Write([]byte(fmt.Sprintf("Welcome %s!", creds.Username)))
 
 }
